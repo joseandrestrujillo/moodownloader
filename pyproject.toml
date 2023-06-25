@@ -11,6 +11,7 @@ beautifulsoup4 = "^4.12.2"
 requests = "^2.31.0"
 pdfkit = "^1.0.0"
 robobrowser = "^0.5.3"
+werkzeug = "0.16.1"
 
 
 [build-system]
