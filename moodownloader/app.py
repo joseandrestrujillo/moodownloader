@@ -2,8 +2,6 @@ from robobrowser import RoboBrowser
 from bs4 import BeautifulSoup
 import getpass
 import os.path
-import http.cookiejar
-import requests
 
 def main():
     url = input("Introduzca la url del moodle que quieres descargar: ")
@@ -50,24 +48,30 @@ def main():
                         if 'pdf' in img_tag['src']:
                             pdf_name = pdf_link.find("span", {"class": "instancename"}).text.strip()
                             file_name = pdf_name.replace(" ", "_").replace("/", "").replace(".", "").replace("-", "_") + ".pdf"
-                            # Descargar el archivo al que te redirije pdf_url y guardarlo en la carpeta del curso con el nombre file_name 
-                            # Solo modificar aqui dentro !!!
-                            browser.follow_link(pdf_link)
-                            try:
-                                # Si el PDF se abre en una ventana emergente, cambia al controlador de ventana
-                                browser.switch_to.window(browser.windows[-1])
-                                response = browser.session.get(browser.url, stream=True)                            
+                            response = browser.session.get(pdf_url, stream=True)
+                            # La respuesta directamente es un pdf -> Lo descarga
+                            if response.headers.get('content-type') == 'application/pdf':
                                 with open(os.path.join(course_dir, file_name), "wb") as f:
                                     for chunk in response.iter_content(chunk_size=1024):
                                         f.write(chunk)
                                 print(f"Archivo {file_name} guardado en la carpeta {course_dir}.")
-                            except:
-                                # Si el PDF se descarga directamente, descárgalo y guárdalo como antes
-                                response = browser.session.get(pdf_url, stream=True)
-                                with open(os.path.join(course_dir, file_name), "wb") as f:
-                                    for chunk in response.iter_content(chunk_size=1024):
-                                        f.write(chunk)
-                                print(f"Archivo {file_name} guardado en la carpeta {course_dir}.")
+                            else:
+                            # La respuesta es una pagina que te lleva al pdf -> busca el link del pdf en la pagina y lo descarga
+                                soup = BeautifulSoup(response.content, 'html.parser')
+                                resource_tag = soup.find('div', {"class": "resourceworkaround"})
+                                if resource_tag is not None:
+                                    pdf_a_tag = resource_tag.find('a', {'href': lambda x: x.endswith('.pdf')})
+                                    if pdf_a_tag is not None:
+                                        pdf_url = pdf_a_tag['href']
+                                        response = browser.session.get(pdf_url, stream=True)
+                                        with open(os.path.join(course_dir, file_name), "wb") as f:
+                                            for chunk in response.iter_content(chunk_size=1024):
+                                                f.write(chunk)
+                                        print(f"Archivo {file_name} guardado en la carpeta {course_dir}.")
+                                    else:
+                                        print(f"No se pudo encontrar el enlace para el archivo PDF en {pdf_url}")
+                                else:
+                                    print(f"No se pudo encontrar el enlace para el archivo PDF en {pdf_url}")                   
 
             else:
                 print(f"No se pudo encontrar el enlace para el curso {course_dir}")
