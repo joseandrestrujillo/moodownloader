@@ -1,5 +1,4 @@
 from robobrowser import RoboBrowser
-from bs4 import BeautifulSoup
 import getpass
 import os.path
 
@@ -22,7 +21,7 @@ def main():
     if not authenticator.authenticate():
         return
     
-    
+
     navigator = MoodleNavigator(authenticator.browser)
     course_links = navigator.get_course_links()
 
