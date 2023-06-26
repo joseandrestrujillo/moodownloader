@@ -3,23 +3,21 @@ from bs4 import BeautifulSoup
 import getpass
 import os.path
 
+from authenticator import MoodleAuthenticator
+
 def main():
+    # User input
     url = input("Introduzca la url del moodle que quieres descargar: ")
+    username = input("Introduzca el nombre de usuario de moodle: ")
+    password = getpass.getpass('Introduzca la contrasena de moodle: ') 
+
+
     url = "https://" + url
-    url_login = url + "login/index.php"    
 
     browser = RoboBrowser(parser='html.parser')
-    browser.open(url_login)
-
-    form = browser.get_form()
-    if form is not None:
-        username = input("Introduzca el nombre de usuario de moodle: ")
-        password = getpass.getpass('Introduzca la contrasena de moodle: ') 
-        form['username'].value = username
-        form['password'].value = password
-        browser.submit_form(form)
-    else:
-        print('No se pudo encontrar el formulario de inicio de sesión.')
+    
+    authenticator = MoodleAuthenticator(url, username, password, browser)
+    if not authenticator.authenticate():
         return
         
     browser.open(url)

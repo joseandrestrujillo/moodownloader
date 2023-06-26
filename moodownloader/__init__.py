@@ -1,3 +1,3 @@
-from .authenticator import MoodleAuthenticator
-from .navigator import MoodleNavigator
-from .downloader import PdfDownloader
+from authenticator import MoodleAuthenticator
+from navigator import MoodleNavigator
+from downloader import PdfDownloader
