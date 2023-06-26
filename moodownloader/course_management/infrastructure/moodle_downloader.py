@@ -1,12 +1,14 @@
 from bs4 import BeautifulSoup
 import os.path
 
-class PdfDownloader:
+from ..domain.downloader import Downloader
+
+class PdfDownloader(Downloader):
     def __init__(self, browser, course_dir: str) -> None:
         self.browser = browser
         self.course_dir = course_dir
 
-    def download_pdf_from_link(self, pdf_link):
+    def _download_pdf_from_link(self, pdf_link) -> None:
         # Descarga el archivo PDF y lo guarda en la carpeta del curso
         pdf_url = pdf_link['href']
         img_tags = pdf_link.find_all('img', {'src': True})
@@ -43,4 +45,4 @@ class PdfDownloader:
     def download_all_pdfs(self):
         pdf_links = self.browser.find_all('a', {'href': True})
         for pdf_link in pdf_links:
-            self.download_pdf_from_link(pdf_link)
+            self._download_pdf_from_link(pdf_link)

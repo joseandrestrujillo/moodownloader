@@ -2,7 +2,7 @@ from robobrowser import RoboBrowser
 import getpass
 import os.path
 
-from authentication.infrastructure.authenticator import MoodleAuthenticator
+from moodownloader.authentication.infrastructure.moodle_authenticator import MoodleAuthenticator
 from course_management.infrastructure.navigator import MoodleNavigator
 from course_management.infrastructure.downloader import PdfDownloader
 

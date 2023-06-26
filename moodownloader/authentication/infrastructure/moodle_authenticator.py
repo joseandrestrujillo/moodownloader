@@ -1,4 +1,6 @@
-class MoodleAuthenticator:
+from ..domain.authenticator import Authenticator
+
+class MoodleAuthenticator(Authenticator):
     def __init__(self, url: str, username: str, password: str, browser) -> None:
         self.url = url
         self.username = username
