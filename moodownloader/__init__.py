@@ -1,3 +1,3 @@
-from authenticator import MoodleAuthenticator
-from navigator import MoodleNavigator
-from downloader import PdfDownloader
+from moodownloader.authentication.infrastructure.authenticator import MoodleAuthenticator
+from moodownloader.course_management.infrastructure.navigator import MoodleNavigator
+from moodownloader.course_management.infrastructure.downloader import PdfDownloader

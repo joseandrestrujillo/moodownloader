@@ -2,9 +2,9 @@ from robobrowser import RoboBrowser
 import getpass
 import os.path
 
-from authenticator import MoodleAuthenticator
-from navigator import MoodleNavigator
-from downloader import PdfDownloader
+from authentication.infrastructure.authenticator import MoodleAuthenticator
+from course_management.infrastructure.navigator import MoodleNavigator
+from course_management.infrastructure.downloader import PdfDownloader
 
 def main():
     # User input
