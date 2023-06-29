@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from element import Element
+from .element import Element
 
 class Navigator(ABC):
     @abstractmethod

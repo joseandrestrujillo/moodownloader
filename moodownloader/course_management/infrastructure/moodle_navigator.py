@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from typing import List
 
-from dom_element import DomElement
+from .dom_element import DomElement
 
 
 class MoodleNavigator:
@@ -14,5 +14,5 @@ class MoodleNavigator:
         return course_links
 
     def navigate_to_course(self, course_link) -> None:
-        self.browser.follow_link(course_link)
+        self.browser.follow_link(course_link.soup)
     

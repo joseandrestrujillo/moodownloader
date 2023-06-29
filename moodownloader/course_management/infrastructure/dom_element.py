@@ -13,7 +13,7 @@ class DomElement(Element):
         return DomElement(soup)
 
 
-    def find_all(self, tag: str, params: Dict[any]) -> List["DomElement"]:
+    def find_all(self, tag: str, params: Dict) -> List["DomElement"]:
         soups = self.soup.find_all(tag, params)
         
         res = []
@@ -22,10 +22,11 @@ class DomElement(Element):
 
         return res
     
+    
+    def find(self, tag: str, params: Dict) -> "Element":
+        return self._convert_soup_into_dom_element(self.soup.find(tag, params))
+    
     def __getattr__(self, name):
         return self.soup[name]
-
-    def __setattr__(self, name, value):
-        self.soup[name] = value
 
     

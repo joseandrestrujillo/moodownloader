@@ -14,7 +14,6 @@ robobrowser = "^0.5.3"
 werkzeug = "0.16.1"
 selenium = "^4.10.0"
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

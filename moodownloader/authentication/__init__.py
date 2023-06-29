@@ -1,1 +1,0 @@
-from moodownloader.authentication.infrastructure.moodle_authenticator import MoodleAuthenticator

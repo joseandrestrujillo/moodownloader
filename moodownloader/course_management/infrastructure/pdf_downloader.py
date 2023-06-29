@@ -4,12 +4,10 @@ import os.path
 from ..domain.downloader import Downloader
 
 class PdfDownloader(Downloader):
-    def __init__(self, browser, course_dir: str) -> None:
+    def __init__(self, browser) -> None:
         self.browser = browser
-        self.course_dir = course_dir
 
     def _download_pdf_from_link(self, pdf_link) -> None:
-        # Descarga el archivo PDF y lo guarda en la carpeta del curso
         pdf_url = pdf_link['href']
         img_tags = pdf_link.find_all('img', {'src': True})
         for img_tag in img_tags:
@@ -17,14 +15,12 @@ class PdfDownloader(Downloader):
                 pdf_name = pdf_link.find("span", {"class": "instancename"}).text.strip()
                 file_name = pdf_name.replace(" ", "_").replace("/", "").replace(".", "").replace("-", "_") + ".pdf"
                 response = self.browser.session.get(pdf_url, stream=True)
-                # La respuesta directamente es un pdf -> Lo descarga
                 if response.headers.get('content-type') == 'application/pdf':
                     with open(os.path.join(self.course_dir, file_name), "wb") as f:
                         for chunk in response.iter_content(chunk_size=1024):
                             f.write(chunk)
                     print(f"Archivo {file_name} guardado en la carpeta {self.course_dir}.")
                 else:
-                # La respuesta es una pagina que te lleva al pdf -> busca el link del pdf en la pagina y lo descarga
                     soup = BeautifulSoup(response.content, 'html.parser')
                     resource_tag = soup.find('div', {"class": "resourceworkaround"})
                     if resource_tag is not None:
